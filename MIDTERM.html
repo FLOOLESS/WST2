@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Users</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .card {
+            border: 3px solid black;
+            padding: 10px;
+            width: 250px;
+            text-align: center;
+        }
+        .card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <h1>ABC Colleges</h1>
+    <h2>Library Users</h2>
+    <div class="container" id="userContainer"></div>
+
+    <script>
+        function loadXML() {
+            fetch('juan_delacruz.xml')
+                .then(response => response.text())
+                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+                .then(data => {
+                    let users = data.getElementsByTagName("user");
+                    let container = document.getElementById("userContainer");
+                    
+                    for (let i = 0; i < users.length; i++) {
+                        let picture = users[i].getElementsByTagName("picture")[0].textContent;
+                        let name = users[i].getElementsByTagName("name")[0].textContent;
+                        let course = users[i].getElementsByTagName("course")[0].textContent;
+                        let year = users[i].getElementsByTagName("year_level_section")[0].textContent;
+                        let adviser = users[i].getElementsByTagName("adviser")[0].textContent;
+                        let schoolYear = users[i].getElementsByTagName("school_year")[0].textContent;
+                        
+                        let userCard = document.createElement("div");
+                        userCard.classList.add("card");
+                        userCard.innerHTML = `
+                            <img src="${picture}" alt="User Picture">
+                            <p><strong>Name:</strong> ${name}</p>
+                            <p><strong>Course:</strong> ${course}</p>
+                            <p><strong>Year Level / Section:</strong> ${year}</p>
+                            <p><strong>Adviser:</strong> ${adviser}</p>
+                            <p><strong>School Year:</strong> ${schoolYear}</p>
+                        `;
+                        container.appendChild(userCard);
+                    }
+                });
+        }
+        document.addEventListener("DOMContentLoaded", loadXML);
+    </script>
+</body>
+</html>
